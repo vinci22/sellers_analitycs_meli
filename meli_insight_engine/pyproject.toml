@@ -1,0 +1,25 @@
+[project]
+name = "meli_insight_engine"
+version = "0.1.0"
+description = "Toolkit para analisis de datos de sellers en MELI con LLMs y DuckDB"
+authors = [
+    { name = "Tu Nombre", email = "tu@email.com" }
+]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "duckdb",
+    "langchain>=0.1.14",
+    "openai",                 # Necesario para compatibilidad con ChatOpenAI
+    "pydantic<2",             # LangChain aún usa Pydantic v1
+    "tiktoken",               # Tokenizer compatible con modelos tipo OpenAI
+    "python-dotenv"           # Si quieres cargar la API key desde .env
+]
+
+[tool.setuptools.packages.find]
+where = ["core"]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
