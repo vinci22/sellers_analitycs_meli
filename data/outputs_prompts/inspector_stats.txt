@@ -1,0 +1,219 @@
+================================================================================
+ANÁLISIS INICIAL DE DATOS - 2025-08-03 19:06:54
+================================================================================
+
+📊 DIMENSIONES DEL DATASET
+• Filas: 185250
+• Columnas: 14
+
+📝 RESUMEN CONSOLIDADO POR COLUMNA
+          columna  total  unicos  nulos column_type  porcentaje_nulos  score_calidad
+          tim_day 185250       1      0        DATE          0.000000            0.5
+  seller_nickname 185250   46586      0     VARCHAR          0.000000            0.9
+           titulo 185250  174746      0     VARCHAR          0.000000            0.9
+seller_reputation 185250       9   2372     VARCHAR          0.012804            0.8
+            stock 185250    3609      0      BIGINT          0.000000            1.0
+    logistic_type 185250       5      0     VARCHAR          0.000000            1.0
+        condition 185250       3      0     VARCHAR          0.000000            1.0
+   is_refurbished 185250       2      0     BOOLEAN          0.000000            1.0
+            price 185250   36529   1516      DOUBLE          0.008184            0.8
+    regular_price 185250   12109 135294      DOUBLE          0.730332            0.8
+        categoria 185250      54      0     VARCHAR          0.000000            1.0
+              url 185250  185250      0     VARCHAR          0.000000            0.9
+      category_id 185250      54      0     VARCHAR          0.000000            1.0
+    category_name 185250      54      0     VARCHAR          0.000000            1.0
+
+📈 ESTADÍSTICOS NUMÉRICOS
+ min_stock  max_stock  avg_stock  min_price    max_price    avg_price  min_regular_price  max_regular_price  avg_regular_price
+         0      99999  307.01709        0.0 4772353854.0 37015.311261                6.1           999999.0         1614.42917
+
+🏷️ DISTRIBUCIÓN DE CATEGORÍAS (TOP 5)
+
+• tim_day:
+columna               valor  frecuencia
+tim_day 2024-08-01 00:00:00      185250
+• seller_nickname:
+        columna      valor  frecuencia
+seller_nickname a9847ce81d        1421
+seller_nickname 5a39342818         877
+seller_nickname 77b179c68c         876
+seller_nickname d5f5bc5f45         795
+seller_nickname 02cdf9f94d         510
+• titulo:
+columna                                                                       valor  frecuencia
+ titulo                    Memoria Usb Adata Uv250 Auv250-16g-rbk 16gb 2.0 Plateado         100
+ titulo                     Apple AirPods Pro 2nda Generación Color De La Luz Verde          80
+ titulo Tarjeta De Memoria Kingston Sdcs2  Canvas Select Plus Con Adaptador Sd 32gb          76
+ titulo                                                Ariana Grande Ari Edp 100 Ml          73
+ titulo                      Apple Cargador 20w Usb-c Lightning To Usb Color Blanco          54
+• seller_reputation:
+          columna          valor  frecuencia
+seller_reputation green_platinum       69625
+seller_reputation          green       33838
+seller_reputation     green_gold       28332
+seller_reputation   green_silver       24731
+seller_reputation         newbie        9221
+• stock:
+columna valor  frecuencia
+  stock     1       38119
+  stock     2       13529
+  stock     3        9980
+  stock    10        9448
+  stock     5        7783
+• logistic_type:
+      columna valor  frecuencia
+logistic_type    XD      116763
+logistic_type   FBM       31483
+logistic_type    DS       24645
+logistic_type  Otro       10541
+logistic_type  FLEX        1818
+• condition:
+  columna         valor  frecuencia
+condition           new      169616
+condition          used       15551
+condition not_specified          83
+• is_refurbished:
+       columna valor  frecuencia
+is_refurbished False      184515
+is_refurbished  True         735
+• price:
+columna  valor  frecuencia
+  price  299.0        2487
+  price  399.0        1659
+  price  298.0        1532
+  price    NaN        1516
+  price  499.0        1465
+• regular_price:
+      columna  valor  frecuencia
+regular_price    NaN      135294
+regular_price  298.0        1386
+regular_price  199.0         731
+regular_price  399.0         561
+regular_price  499.0         542
+• categoria:
+  columna                        valor  frecuencia
+categoria                       SPORTS       14252
+categoria                       HEALTH       12587
+categoria BOOKS, MULTIMEDIA & OTHER E!       10355
+categoria               TOYS AND GAMES       10251
+categoria              ACC CARS & VANS       10128
+• url:
+columna                                                                                                                valor  frecuencia
+    url   https://articulo.mercadolibre.com.mx/MLM-2055532937-riel-inyectores-jetta-a4-20-beetle-99-a-07-clasico-08-a-15-_JM           1
+    url       https://articulo.mercadolibre.com.mx/MLM-2077565214-manguera-de-freno-chevrolet-tracker-1989-98-delderecha-_JM           1
+    url                  https://articulo.mercadolibre.com.mx/MLM-2434576402-radiador-para-honda-cr-v-2007-2008-2009-dyc-_JM           1
+    url               https://articulo.mercadolibre.com.mx/MLM-2779173566-cubreasientos-tactopiel-fundas-ford-expedition-_JM           1
+    url https://articulo.mercadolibre.com.mx/MLM-2809941630-aspas-fan-clutch-termico-deposi-mercedes-benz-sprinter-01-17-_JM           1
+• category_id:
+    columna                        valor  frecuencia
+category_id                       SPORTS       14252
+category_id                       HEALTH       12587
+category_id BOOKS, MULTIMEDIA & OTHER E!       10355
+category_id               TOYS AND GAMES       10251
+category_id              ACC CARS & VANS       10128
+• category_name:
+      columna                              valor  frecuencia
+category_name                           DEPORTES       14252
+category_name                              SALUD       12587
+category_name         LIBROS, MULTIMEDIA Y OTROS       10355
+category_name                  JUGUETES Y JUEGOS       10251
+category_name ACCESORIOS PARA AUTOS Y CAMIONETAS       10128
+
+⚠️ PROBLEMAS IDENTIFICADOS
+
+• Columnas con valores constantes:
+columna
+tim_day
+
+📊 MÉTRICAS DESCRIPTIVAS POR SELLER
+
+🔹 INDICE VARIEDAD
+seller_nickname  total_publicaciones  titulos_unicos  indice_variedad
+     95cacb997f                   23              23              1.0
+     35c182ca96                   13              13              1.0
+     af17728bf0                    6               6              1.0
+     93ef2d58ba                   65              65              1.0
+     72e36d8e79                    1               1              1.0
+     03774e1891                   24              24              1.0
+     f04844877c                    5               5              1.0
+     8fd778b910                   10              10              1.0
+     40e18ecac0                    3               3              1.0
+     d00d7ebe4b                   19              19              1.0
+
+🔹 DESVIACION PRECIO
+seller_nickname  std_precio
+     f452eb7f78    0.000000
+     525594a0b5 1689.643365
+     aa6e06c8a8  869.861586
+     e1f95c8f66 1081.166268
+     d951edb344 4977.211493
+     6bd147fe2e 2051.036518
+     db5bf31dfa 1430.770982
+     7563e6ce11 2333.222488
+     4230eabf53 1228.263001
+     13d2f4defa 2160.636774
+
+🔹 PROPORCION PREMIUM
+seller_nickname  total  premium  proporcion_premium
+     c9da7b76bc      2      1.0            0.500000
+     1a69e90893     65     50.0            0.769231
+     1839c7cb1d     33     11.0            0.333333
+     22eee34b2e      4      0.0            0.000000
+     ed67befafc      1      1.0            1.000000
+     d8ec930753     54     46.0            0.851852
+     cb83b9ea93      3      3.0            1.000000
+     65e565c188      7      1.0            0.142857
+     aead75e924     22      7.0            0.318182
+     3b955dffac     11      0.0            0.000000
+
+🔹 DENSIDAD CATEGORIA
+seller_nickname  total_publicaciones  total_categorias  densidad_categoria
+     c9da7b76bc                    2                 1            2.000000
+     1a69e90893                   65                 6           10.833333
+     1839c7cb1d                   33                 1           33.000000
+     22eee34b2e                    4                 1            4.000000
+     ed67befafc                    1                 1            1.000000
+     d8ec930753                   54                 6            9.000000
+     cb83b9ea93                    3                 1            3.000000
+     65e565c188                    7                 3            2.333333
+     aead75e924                   22                 4            5.500000
+     3b955dffac                   11                 4            2.750000
+
+🔹 RELACION PUBLICACIONES STOCK
+seller_nickname  promedio_stock  total_publicaciones  relacion_publicaciones_stock
+     c9da7b76bc        1.000000                    2                      0.500000
+     1a69e90893    13615.461538                   65                    209.468639
+     1839c7cb1d        8.484848                   33                      0.257117
+     22eee34b2e        2.250000                    4                      0.562500
+     ed67befafc        1.000000                    1                      1.000000
+     d8ec930753       21.277778                   54                      0.394033
+     cb83b9ea93        9.000000                    3                      3.000000
+     65e565c188      195.571429                    7                     27.938776
+     aead75e924        3.954545                   22                      0.179752
+     3b955dffac        2.454545                   11                      0.223140
+
+🔹 RATIO NUEVOS VS REACONDICIONADOS
+seller_nickname  nuevos  usados  ratio_nuevo_usado
+     6f6d339e96     4.0     0.0                NaN
+     827ed88f44     2.0     0.0                NaN
+     70bc37728b     1.0     0.0                NaN
+     9bfa59ef31    20.0     0.0                NaN
+     a00fed03e3     0.0     1.0                0.0
+     747e4d9288     0.0     1.0                0.0
+     7b2449f87f    14.0     0.0                NaN
+     14f77be198     7.0     0.0                NaN
+     435c3d0201    23.0     0.0                NaN
+     6ec02ef996    65.0     0.0                NaN
+
+🔹 PROPORCION PRECIOS BAJOS
+seller_nickname  total  bajo_promedio  proporcion_bajo_promedio
+     6f6d339e96      4            4.0                       1.0
+     827ed88f44      2            2.0                       1.0
+     70bc37728b      1            1.0                       1.0
+     9bfa59ef31     20           18.0                       0.9
+     a00fed03e3      1            1.0                       1.0
+     747e4d9288      1            0.0                       0.0
+     7b2449f87f     14           14.0                       1.0
+     14f77be198      7            7.0                       1.0
+     435c3d0201     23           23.0                       1.0
+     6ec02ef996     65           65.0                       1.0

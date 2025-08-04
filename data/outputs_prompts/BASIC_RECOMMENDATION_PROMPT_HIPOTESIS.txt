@@ -1,0 +1,78 @@
+### **Reporte de Comprensión Inicial del Dataset**
+
+---
+
+#### **1. Estructura Básica**
+- **Total registros**: 185,250  
+- **Total variables**: 14  
+- **Variables clave identificadas**:  
+  - **[Numérica Continua] `price`**: Precio actual del producto (variable objetivo potencial).  
+  - **[Numérica Continua] `regular_price`**: Precio regular (alta tasa de nulos, requiere imputación).  
+  - **[Categórica Ordinal] `seller_reputation`**: Reputación del vendedor (jerarquía implícita útil para análisis de confianza).  
+  - **[Booleana] `is_refurbished`**: Indica si el producto es reacondicionado (desequilibrio extremo, relevante para segmentación).  
+  - **[Nominal] `categoria`**: Categoría del producto (posible driver de precios y stock).  
+
+---
+
+#### **2. Hallazgos de Calidad**  
+- **`regular_price`**:  
+  - **Tipo de problema**: Missing values (73.03% nulos).  
+  - **Severidad**: Alta (afecta análisis de descuentos/precios).  
+  - **Acción sugerida**: Imputación predictiva (modelo basado en `price` y categoría).  
+
+- **`titulo`**:  
+  - **Tipo de problema**: Alta cardinalidad (174,746 valores únicos).  
+  - **Severidad**: Media (puede generar ruido en modelos).  
+  - **Acción sugerida**: Hashing o NLP para extraer características clave.  
+
+- **`is_refurbished`**:  
+  - **Tipo de problema**: Desequilibrio (99.6% "False").  
+  - **Severidad**: Alta (impacta modelos de clasificación).  
+  - **Acción sugerida**: Rebalanceo con SMOTE o undersampling.  
+
+- **`tim_day`**:  
+  - **Tipo de problema**: Valor constante.  
+  - **Severidad**: Baja (sin impacto analítico).  
+  - **Acción sugerida**: Eliminar columna.  
+
+- **`price`**:  
+  - **Tipo de problema**: Outliers (valores hasta 4.7B).  
+  - **Severidad**: Alta (distorsiona estadísticas).  
+  - **Acción sugerida**: Clipping (límite superior: 999,999).  
+
+---
+
+#### **3. Relaciones Potenciales**  
+- **`price` ↔ `is_refurbished`**: Diferencias de precio por condición del producto. **Método**: ANOVA.  
+- **`seller_reputation` ↔ `price`**: Correlación entre reputación y precios. **Método**: Spearman (ordinal-numérica).  
+- **`categoria` ↔ `stock`**: Patrones de stock por categoría. **Método**: Test Chi-cuadrado.  
+
+---
+
+#### **4. Recomendaciones para EDA**  
+- **Grupo 1**: `price`, `regular_price`, `is_refurbished`  
+  - **Objetivo**: Analizar estrategias de precios y descuentos.  
+- **Grupo 2**: `seller_reputation`, `categoria`, `stock`  
+  - **Objetivo**: Explorar segmentación por confianza del vendedor y disponibilidad.  
+
+**Transformaciones previas**:  
+- **`regular_price`**: Aplicar log-transform (mejorar linealidad).  
+- **`seller_reputation`**: Codificar ordinalmente (ej: "newbie"=0, "green_platinum"=4).  
+
+---
+
+#### **5. Advertencias Clave**  
+- **Limitación 1**: Alta cardinalidad en `titulo` y `url` (requiere eliminación o procesamiento avanzado).  
+- **Limitación 2**: Desequilibrio en `is_refurbished` (puede sesgar modelos predictivos).  
+
+---
+
+#### **6. Conclusión Ejecutiva**  
+- **Calidad del dataset**: Aceptable con deficiencias controlables (alta tasa de nulos en `regular_price`, outliers en `price`).  
+- **Variables prometedoras**: `price` (análisis de precios), `seller_reputation` (segmentación), `categoria` (patrones de inventario).  
+- **Riesgos principales**:  
+  - Outliers en precios distorsionan métricas.  
+  - Desequilibrio en variables booleanas afecta modelos.  
+- **Valor potencial**: Dataset robusto para análisis de precios y reputación si se aplican imputaciones y transformaciones sugeridas.  
+
+**Recomendación final**: Priorizar limpieza de outliers y nulos antes de clustering o modelos predictivos.
