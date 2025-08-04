@@ -23,7 +23,9 @@ y proponer extensiones basadas en IA generativa.
      * En el medio, los  **En Crecimiento** .
      * Abajo, los  **Ocasionales** .
    * Un vistazo basta para explicarle a cualquier colega (sin fórmulas) por qué un vendedor es Power y otro no.
-3. **Crear filtros y playbooks listos para usar**| Segmento                        | Cómo lo filtra el comercial        | Acción inmediata recomendada                               |
+3. **Crear filtros y playbooks listos para usar**
+   
+   | Segmento                        | Cómo lo filtra el comercial        | Acción inmediata recomendada                               |
    | ------------------------------- | ----------------------------------- | ----------------------------------------------------------- |
    | **Power Seller**          | `cluster_name = "Power Seller"`   | Ofrecer comisión preferencial y logística premium.        |
    | **Seller en Crecimiento** | `cluster_name = "En Crecimiento"` | Enviar “Pack de Ads + asesoría” para que suban de nivel. |
@@ -38,7 +40,6 @@ y proponer extensiones basadas en IA generativa.
 
 Con la etiqueta diaria, el gráfico PCA que lo explica todo y tres playbooks pre-armados, el equipo comercial sabrá **a quién mimar, a quién impulsar y a quién entrenar** sin necesidad de mirar una sola línea de código.
 
-
 ## 2. ✔️ Respuesta en una frase
 
 Tres segmentos bien definidos (Premium, Consolidados, Ocasionales) explican > 80 % del GMV con métricas internas sólidas (Silhouette ≈ 0.49, DB ≈ 1.13).
@@ -48,6 +49,8 @@ Cada uno recibe acciones comerciales concretas (comisiones, Ads, logística).
 
 ## 3. 📑 Entregables de la prueba
 
+
+
 | Ruta / archivo                                             | Descripción                                                                                                                                                                                       |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`notebooks/01_LMEDA_LLM_4_DATA_ANALYSIS.ipynb`** | Notebook de**EDA asistido por IA generativa**. Limpia, enriquece y explica el conjunto de datos, combinando pandas con prompts de LLM.                                                       |
@@ -55,7 +58,7 @@ Cada uno recibe acciones comerciales concretas (comisiones, Ads, logística).
 | **`data/`**                                        | Carpeta de datasets.                                                                                                                                                                               |
 | ├──**`df_challenge_meli.csv`**                  | Dataset**crudo** suministrado en la prueba.                                                                                                                                                  |
 | ├──**`df_challenge_meli_limpio.csv`**           | Dataset**depurado y enriquecido** a nivel seller (feature-store).                                                                                                                            |
-| ├──**`df_challenge_meli_cluster.csv`**          | Matriz final con la etiqueta **`cluster_id`** asignada a cada vendedor.                                                                                                                    |
+| ├──**`df_challenge_meli_cluster.csv`**          | Matriz final con la etiqueta**`cluster_id`** asignada a cada vendedor.                                                                                                                     |
 | ├──**`pca_loadings.csv`**                       | Pesos de las variables en PC1 y PC2 para interpretar el PCA.                                                                                                                                       |
 | └──**`meli_insight_engine/`**                   | Librería**custom** con utilidades de EDA y agentes LangChain reutilizables.                                                                                                                 |
 | **`outputs/`**                                     | Resultados intermedios (tablas agregadas, perfiles, métricas…).                                                                                                                                  |
