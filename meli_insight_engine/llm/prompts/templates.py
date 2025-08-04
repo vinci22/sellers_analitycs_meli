@@ -1,3 +1,4 @@
+from langchain.prompts import PromptTemplate
 BASIC_RECOMMENDATION_PROMPT_JSON = """
 Basado en el siguiente análisis estadístico detallado, genera un reporte JSON estructurado que:
 
@@ -194,29 +195,95 @@ Listar pares de variables prometedoras para análisis:
 
 
 BASE_PROMPT_PSA_CORELATIO = """
-# 📝 Prompt-template para interpretar PCA + Clusters  
-*(sustituye sólo las llaves {{…}} con tu información)*
+# ──────────────────────────────────────────────────────────────────────────
 
-Eres un **data scientist senior**.  
-A continuación tendrás dos bloques de entrada:
+Eres asesor comercial senior de Mercado Libre.
 
-**🔹 PCA**  
-{pca_valores}
+El vendedor pertenece al segmento **{{cluster_name}}**.
+Su objetivo comercial es:
 
-**🔹 Resumen/tabla de clusters u otra información contextual**  
-{contenido}
+{{#if (eq cluster_name "Power Seller")}}
+• Retenerlo y aumentar GMV con beneficios exclusivos (comisión preferencial, logística premium).
+{{/if}}
+{{#if (eq cluster_name "Seller en Crecimiento")}}
+• Impulsar crecimiento para que ascienda a Power (más ventas, mejor reputación).
+{{/if}}
+{{#if (eq cluster_name "Ocasional")}}
+• Capacitarlo y mejorar calidad para reducir reclamos y subir ventas.
+{{/if}}
 
-## Tareas que debes realizar
-1. **Explica, en lenguaje claro para negocio, qué representan PC1 y PC2** según las cargas mostradas.  
-2. **Relaciona los clusters con el plano PC1-PC2**: indica dónde se ubican y qué significa su posición.  
-3. **Asigna o valida etiquetas intuitivas** para cada cluster (máx. 6 palabras por etiqueta).  
-4. **Extrae 3-5 insights accionables** que ayuden a Mercado Libre a diseñar estrategias comerciales personalizadas (pricing, promociones, soporte, etc.).  
-5. Si detectas **riesgos o limitaciones** metodológicas, menciónalos brevemente.
+Métricas del vendedor
+─────────────────────
+• Publicaciones        : {{publicaciones}}
+• Categorías distintas : {{categorias_distintas}}
+• Stock medio (uds)    : {{stock_promedio}}
+• Precio medio         : ${{precio_medio_cop:,}}
+• Descuento medio      : {{descuento_pct:.0%}}
+• Reputación           : {{rep_score}} / 5
+• Cancelación          : {{tasa_cancelacion:.1%}}
 
-### Formato de salida esperado
-- **Resumen de PC1 / PC2** (2-3 frases cada uno)  
-- **Tabla “Cluster – Etiqueta – Rasgos clave”**  
-- **Lista numerada de insights**  
-- **Alerta de riesgos (opcional, ≤3 líneas)**
+### Instrucciones
+1. Propón **una** acción concreta y prioritaria (≤150 palabras).
+2. Justifica brevemente por qué funcionará para este segmento.
+3. Sé claro, directo y orientado a negocio; no repitas las métricas textualmente.
 
 """
+
+season_prompt = PromptTemplate(
+    template="""
+Actúa como analista comercial experto en e-commerce LATAM.
+
+Pregunta: ¿Qué contexto de temporada afecta hoy la venta en Mercado Libre Colombia?
+Tienes acceso al calendario y sabes si hay campañas activas, vacaciones escolares, festivales o eventos masivos.
+
+Fecha de hoy: {fecha_actual}
+
+Responde SOLO una de estas opciones, de manera concisa:
+- Black Sale
+- Hot Sale
+- Cyberlunes
+- Fin de año / Navidad
+- Vacaciones mitad de año
+- Día del Padre/Madre
+- Temporada baja
+- Otra campaña: [nómbrala]
+- Ninguna campaña
+
+Explica en una frase tu razonamiento.
+""",
+    input_variables=["fecha_actual"]
+)
+
+strategy_prompt = PromptTemplate(
+    template="""
+Eres asesor comercial de Mercado Libre.
+
+Hoy es: {fecha_actual} | Temporada: {temporada}
+
+El vendedor es del segmento **{cluster_name}**.
+Tu objetivo es proponer UNA acción prioritaria para aumentar ventas y margen, considerando:
+– El segmento del vendedor.
+– Las métricas clave.
+– El contexto de temporada (ej: Black Sale, vacaciones, etc).
+
+Métricas:
+• Publicaciones        : {publicaciones}
+• Categorías distintas : {categorias_distintas}
+• Stock medio (uds)    : {stock_promedio}
+• Precio medio         : ${precio_medio_cop:,}
+• Descuento medio      : {descuento_pct:.0%}
+• Reputación           : {rep_score}/5
+• Cancelación          : {tasa_cancelacion:.1%}
+
+# Instrucción
+- Sé específico: si hay Black Sale, sugiere un boost fuerte, si es temporada baja, aconseja conservar margen.
+- No repitas las métricas textualmente; sé breve y orientado a negocio.
+
+### Estrategia
+""",
+    input_variables=[
+        "fecha_actual", "temporada", "cluster_name", "publicaciones",
+        "categorias_distintas", "stock_promedio", "precio_medio_cop",
+        "descuento_pct", "rep_score", "tasa_cancelacion"
+    ]
+)
