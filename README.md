@@ -116,6 +116,9 @@ Instala las dependencias necesarias del proyecto:
 
 pip install -r requirements.txt
 Agrega tu API Key de DeepSeek como si fuera una clave de OpenAI:
+
+#ejecutar modelo de cluster + hipercustomizacion 
+python -m meli_recomender_agent
 ```
 
 Crea un archivo .env en la raíz del proyecto (si no existe) y añade:
@@ -127,6 +130,9 @@ OPENAI_API_KEY=tu_clave_deepseek_aqui
 ✅ Esto permite reutilizar el nombre de variable OPENAI_API_KEY sin tener que cambiar el código, apuntando a DeepSeek como proveedor.
 
 ```
+
+
+
 
 ---
 
@@ -159,7 +165,7 @@ OPENAI_API_KEY=tu_clave_deepseek_aqui
 * Afinar clusters con métricas de rentabilidad neta.
 * Validación A/B en campañas de Ads.
 * Dashboard Looker con funnel de migración entre segmentos.
-
+* incorprorar intregacion con el mpc de Mercado libre
 ---
 
 **Autor:** Dario Arteaga – *versión 1.0 (Jul 2025)*
