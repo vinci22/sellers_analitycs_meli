@@ -12,8 +12,8 @@
               "min": 0.0,
               "max": 4772353854.0,
               "mean": 37015.311261,
-              "freq_values": ["299.0 (2487)", "399.0 (1659)", "298.0 (1532)", "NaN (1516)", "499.0 (1465)"],
-              "outlier_analysis": "Extreme outliers present with max price exceeding normal ranges"
+              "freq_values": ["299.0 (2487)", "399.0 (1659)", "298.0 (1532)", "499.0 (1465)"],
+              "outlier_analysis": "Extreme outliers present with max price exceeding 4.7 billion"
             }
           },
           {
@@ -22,8 +22,8 @@
               "min": 6.1,
               "max": 999999.0,
               "mean": 1614.42917,
-              "freq_values": ["NaN (135294)", "298.0 (1386)", "199.0 (731)", "399.0 (561)", "499.0 (542)"],
-              "outlier_analysis": "High percentage of null values (73%) with some extreme high values"
+              "freq_values": ["298.0 (1386)", "199.0 (731)", "399.0 (561)", "499.0 (542)"],
+              "outlier_analysis": "73% null values, limited range when present"
             }
           }
         ],
@@ -35,7 +35,7 @@
               "max": 99999,
               "mean": 307.01709,
               "freq_values": ["1 (38119)", "2 (13529)", "3 (9980)", "10 (9448)", "5 (7783)"],
-              "distribution_analysis": "Right-skewed distribution with high concentration at low stock levels"
+              "distribution_analysis": "Highly skewed with majority at low stock levels"
             }
           }
         ]
@@ -46,7 +46,7 @@
             "column": "seller_reputation",
             "stats": {
               "values": ["green_platinum (69625)", "green (33838)", "green_gold (28332)", "green_silver (24731)", "newbie (9221)"],
-              "hierarchy": "green_platinum > green_gold > green_silver > green > newbie",
+              "hierarchy": "newbie → green_silver → green_gold → green → green_platinum",
               "balance_analysis": "Hierarchical distribution with clear reputation tiers"
             }
           }
@@ -56,7 +56,7 @@
             "column": "logistic_type",
             "stats": {
               "values": ["XD (116763)", "FBM (31483)", "DS (24645)", "Otro (10541)", "FLEX (1818)"],
-              "dominance_analysis": "XD dominates with 63% of records"
+              "dominance_analysis": "XD accounts for 63% of logistics types"
             }
           },
           {
@@ -77,14 +77,14 @@
             "column": "category_id",
             "stats": {
               "values": ["SPORTS (14252)", "HEALTH (12587)", "BOOKS, MULTIMEDIA & OTHER E! (10355)", "TOYS AND GAMES (10251)", "ACC CARS & VANS (10128)"],
-              "dominance_analysis": "Mirrors categoria distribution exactly"
+              "dominance_analysis": "Mirrors categoria distribution"
             }
           },
           {
             "column": "category_name",
             "stats": {
               "values": ["DEPORTES (14252)", "SALUD (12587)", "LIBROS, MULTIMEDIA Y OTROS (10355)", "JUGUETES Y JUEGOS (10251)", "ACCESORIOS PARA AUTOS Y CAMIONETAS (10128)"],
-              "dominance_analysis": "Spanish version of category_id with same distribution"
+              "dominance_analysis": "Spanish version of category_id"
             }
           }
         ]
@@ -106,15 +106,15 @@
           "stats": {
             "unique_count": 174746,
             "most_common": ["Memoria Usb Adata Uv250 Auv250-16g-rbk 16gb 2.0 Plateado (100)", "Apple AirPods Pro 2nda Generación Color De La Luz Verde (80)", "Tarjeta De Memoria Kingston Sdcs2 Canvas Select Plus Con Adaptador Sd 32gb (76)"],
-            "length_analysis": "High uniqueness (94.3% unique values) with product descriptions"
+            "length_analysis": "Product titles with varying lengths and formats"
           }
         },
         {
           "column": "url",
           "stats": {
             "unique_count": 185250,
-            "most_common": ["All unique URLs"],
-            "length_analysis": "Perfect uniqueness (100%) as expected for URLs"
+            "most_common": ["All unique URLs with single occurrences"],
+            "length_analysis": "Standard e-commerce URL patterns"
           }
         }
       ],
@@ -126,15 +126,13 @@
             "top_values": ["a9847ce81d (1421)", "5a39342818 (877)", "77b179c68c (876)", "d5f5bc5f45 (795)", "02cdf9f94d (510)"],
             "concentration_analysis": "Top seller accounts for 0.77% of listings"
           }
-        }
-      ],
-      "temporal": [
+        },
         {
           "column": "tim_day",
           "stats": {
             "unique_count": 1,
             "top_values": ["2024-08-01 00:00:00 (185250)"],
-            "concentration_analysis": "Constant value - data from single day"
+            "concentration_analysis": "Single date value for entire dataset"
           }
         }
       ]
@@ -142,65 +140,65 @@
   },
   "detailed_metrics_analysis": {
     "price": {
-      "value_range": "0.0 to 4.77B with mean 37,015.31",
+      "value_range": "0.0 to 4,772,353,854.0 with mean 37,015.31",
       "suspicious_values": {
-        "extreme_high": "Values above 1M likely data errors",
-        "zero_values": "0 price items may need validation"
+        "extreme_outliers": "Values exceeding 999,999 should be validated",
+        "nulls": "1,516 null values (0.8%)"
       },
       "recommended_handling": {
-        "cleaning": "Winsorize top 0.1% values",
-        "transformation": "Log transformation for modeling"
+        "cleaning": "Winsorization at 99.9th percentile",
+        "transformation": "Logarithmic scaling after outlier treatment"
       }
     },
     "regular_price": {
-      "value_range": "6.1 to 999,999 with mean 1,614.43",
+      "value_range": "6.1 to 999,999.0 with mean 1,614.43",
       "suspicious_values": {
-        "missing_data": "73% null rate requires investigation",
-        "round_numbers": "High frequency of 298/399/499 suggests psychological pricing"
+        "missing_data": "135,294 null values (73%)",
+        "inconsistency": "298.0 appears in both price and regular_price top values"
       },
       "recommended_handling": {
-        "cleaning": "Impute missing using price column where appropriate",
-        "transformation": "Flag records where price > regular_price"
+        "cleaning": "Impute using price values where missing",
+        "transformation": "Create discount percentage feature (price/regular_price)"
       }
     },
     "seller_reputation": {
       "distribution_insights": {
-        "tier_distribution": "Clear hierarchy with platinum (37.6%) as most common",
-        "newbie_presence": "5% new sellers indicates healthy marketplace"
+        "tier_distribution": "Platinum sellers dominate (37.6%)",
+        "missing_data": "2,372 null values (1.3%)"
       },
-      "business_interpretation": "Reputation tiers correlate with seller privileges and buyer trust"
+      "business_interpretation": "Reputation tier strongly indicates seller reliability"
     },
     "logistic_type": {
       "distribution_insights": {
-        "fulfillment_dominance": "XD (MercadoLibre fulfillment) covers 63% of listings",
-        "marketplace_variety": "FBM (31k) and DS (24k) show alternative logistics options"
+        "market_dominance": "XD (MercadoLibre's own logistics) covers 63%",
+        "rare_categories": "FLEX represents only 1%"
       },
-      "business_interpretation": "Logistics strategy strongly favors platform-managed fulfillment"
+      "business_interpretation": "Strong platform control over fulfillment channels"
     }
   },
   "advanced_metrics": {
     "seller_metrics": {
       "indice_variedad": {
-        "analysis": "Most sellers show perfect variety (1.0) suggesting unique listings",
-        "business_implication": "Low seller-level product duplication"
+        "analysis": "Most sellers show perfect variety (1.0)",
+        "business_implication": "Sellers tend to specialize in unique products"
       },
-      "std_precio": {
-        "analysis": "Wide standard deviation (869-4,977) shows pricing strategy diversity",
-        "business_implication": "Sellers employ different pricing approaches by category"
+      "desviacion_precio": {
+        "analysis": "Wide variation in price consistency across sellers",
+        "business_implication": "Pricing strategies vary significantly by seller"
       },
       "proporcion_premium": {
-        "analysis": "Premium sellers range from 0-100% with median around 20%",
-        "business_implication": "Premium status not strongly correlated with volume"
+        "analysis": "Premium sellers range from 0% to 100%",
+        "business_implication": "No consistent premium seller segment"
       }
     },
     "inventory_metrics": {
       "relacion_publicaciones_stock": {
-        "analysis": "Stock-publication ratio varies from 0.26 to 27.7 (median ~1.5)",
-        "business_implication": "Some sellers maintain high stock per listing while others optimize for availability"
+        "analysis": "Stock levels don't correlate with publication count",
+        "business_implication": "High-volume sellers don't necessarily maintain more inventory"
       },
       "ratio_nuevo_usado": {
-        "analysis": "Overwhelming majority of new items (91.5%) with minimal used market",
-        "business_implication": "Platform positioning as new goods marketplace"
+        "analysis": "Overwhelming majority of new items (91.5%)",
+        "business_implication": "Platform primarily serves new product market"
       }
     }
   },
@@ -218,7 +216,7 @@
         "parameters": {
           "column": "price",
           "method": "winsorization",
-          "threshold": 99.9
+          "percentile": 99.9
         },
         "reason": "Extreme values distort statistical analysis"
       },
@@ -226,35 +224,43 @@
         "action": "missing_data_imputation",
         "parameters": {
           "column": "regular_price",
-          "strategy": "price_based",
-          "tolerance": 0.1
+          "strategy": "derive_from_price",
+          "default_multiplier": 1.2
         },
-        "reason": "High null rate (73%) requires systematic handling"
+        "reason": "73% null rate requires systematic handling"
       },
       {
-        "action": "category_consolidation",
+        "action": "categorical_encoding",
         "parameters": {
-          "columns": ["categoria", "category_id", "category_name"],
-          "strategy": "retain_one"
+          "column": "seller_reputation",
+          "method": "ordinal",
+          "mapping": {
+            "newbie": 1,
+            "green_silver": 2,
+            "green_gold": 3,
+            "green": 4,
+            "green_platinum": 5
+          }
         },
-        "reason": "Redundant category representations"
+        "reason": "Ordinal nature should be captured numerically"
       },
       {
-        "action": "log_transformation",
+        "action": "boolean_balancing",
         "parameters": {
-          "columns": ["price", "regular_price"],
-          "offset": 1
+          "column": "is_refurbished",
+          "method": "oversampling",
+          "target_ratio": 0.1
         },
-        "reason": "Right-skewed monetary values benefit from normalization"
+        "reason": "Extreme class imbalance (0.4%) affects modeling"
       }
     ]
   },
-  "key_relationships": [
-    "seller_reputation vs. price distribution",
-    "logistic_type vs. seller_reputation tiers",
-    "category concentration vs. stock levels",
-    "price vs. regular_price discount patterns",
-    "seller_nickname concentration vs. category specialization"
+  "key_relationships_to_investigate": [
+    "Price distribution across reputation tiers",
+    "Stock levels vs. logistic type efficiency",
+    "Category-specific pricing patterns",
+    "Relationship between seller variety index and reputation",
+    "Discount patterns (price vs regular_price) by category"
   ]
 }
 ```

@@ -6,73 +6,83 @@
 - **Total registros**: 185,250  
 - **Total variables**: 14  
 - **Variables clave identificadas**:  
-  - **[Numérica Continua] `price`**: Precio actual del producto (variable objetivo potencial).  
-  - **[Numérica Continua] `regular_price`**: Precio regular (alta tasa de nulos, requiere imputación).  
-  - **[Categórica Ordinal] `seller_reputation`**: Reputación del vendedor (jerarquía implícita útil para análisis de confianza).  
-  - **[Booleana] `is_refurbished`**: Indica si el producto es reacondicionado (desequilibrio extremo, relevante para segmentación).  
-  - **[Nominal] `categoria`**: Categoría del producto (posible driver de precios y stock).  
+  - **[Numérica Continua] `price`**: Precio de venta con valores extremos (hasta 4.7B) y media en 37,015.  
+  - **[Numérica Discreta] `stock`**: Inventario altamente sesgado (moda = 1, max = 99,999).  
+  - **[Categórica Ordinal] `seller_reputation`**: Jerarquía de reputación (newbie → platinum) con dominio de vendedores platinum (37.6%).  
+  - **[Categórica Nominal] `logistic_type`**: Logística dominada por "XD" (63%, propio de MercadoLibre).  
+  - **[Booleana] `is_refurbished`**: Desbalance extremo (0.4% refurbished).  
 
 ---
 
 #### **2. Hallazgos de Calidad**  
-- **`regular_price`**:  
-  - **Tipo de problema**: Missing values (73.03% nulos).  
-  - **Severidad**: Alta (afecta análisis de descuentos/precios).  
-  - **Acción sugerida**: Imputación predictiva (modelo basado en `price` y categoría).  
+- **`price`**:  
+  - **Tipo de problema**: Outliers extremos (max = 4.7B vs. media = 37K).  
+  - **Severidad**: Alta (distorsiona estadísticas).  
+  - **Acción**: Winsorización al 99.9% + transformación logarítmica.  
 
-- **`titulo`**:  
-  - **Tipo de problema**: Alta cardinalidad (174,746 valores únicos).  
-  - **Severidad**: Media (puede generar ruido en modelos).  
-  - **Acción sugerida**: Hashing o NLP para extraer características clave.  
+- **`regular_price`**:  
+  - **Tipo de problema**: 73% nulos + inconsistencia con `price` (valores frecuentes repetidos).  
+  - **Severidad**: Media-Alta (afecta análisis de descuentos).  
+  - **Acción**: Imputar con `price` * 1.2 (default) o eliminar.  
+
+- **`seller_reputation`**:  
+  - **Tipo de problema**: 1.3% nulos + jerarquía ordinal no codificada.  
+  - **Severidad**: Media.  
+  - **Acción**: Codificación ordinal (newbie=1, platinum=5).  
 
 - **`is_refurbished`**:  
-  - **Tipo de problema**: Desequilibrio (99.6% "False").  
-  - **Severidad**: Alta (impacta modelos de clasificación).  
-  - **Acción sugerida**: Rebalanceo con SMOTE o undersampling.  
+  - **Tipo de problema**: Desbalance (735 vs. 184K).  
+  - **Severidad**: Alta para modelos predictivos.  
+  - **Acción**: Oversampling (target ratio = 10%).  
 
 - **`tim_day`**:  
-  - **Tipo de problema**: Valor constante.  
+  - **Tipo de problema**: Constante (único valor: 2024-08-01).  
   - **Severidad**: Baja (sin impacto analítico).  
-  - **Acción sugerida**: Eliminar columna.  
-
-- **`price`**:  
-  - **Tipo de problema**: Outliers (valores hasta 4.7B).  
-  - **Severidad**: Alta (distorsiona estadísticas).  
-  - **Acción sugerida**: Clipping (límite superior: 999,999).  
+  - **Acción**: Eliminar.  
 
 ---
 
 #### **3. Relaciones Potenciales**  
-- **`price` ↔ `is_refurbished`**: Diferencias de precio por condición del producto. **Método**: ANOVA.  
-- **`seller_reputation` ↔ `price`**: Correlación entre reputación y precios. **Método**: Spearman (ordinal-numérica).  
-- **`categoria` ↔ `stock`**: Patrones de stock por categoría. **Método**: Test Chi-cuadrado.  
+- **`seller_reputation` ↔ `price`**: ¿Vendedores premium fijan precios más altos? Validar con ANOVA o boxplots por tier.  
+- **`logistic_type` ↔ `stock`**: ¿Logística "XD" tiene mejor gestión de inventario? Analizar con medianas agrupadas.  
+- **`category_id` ↔ `price`**: ¿Categorías específicas tienen precios más altos? Heatmap de precios medios por categoría.  
 
 ---
 
 #### **4. Recomendaciones para EDA**  
-- **Grupo 1**: `price`, `regular_price`, `is_refurbished`  
-  - **Objetivo**: Analizar estrategias de precios y descuentos.  
-- **Grupo 2**: `seller_reputation`, `categoria`, `stock`  
-  - **Objetivo**: Explorar segmentación por confianza del vendedor y disponibilidad.  
+- **Grupo 1 (Precios y Reputación)**:  
+  - Variables: `price`, `regular_price`, `seller_reputation`.  
+  - Objetivo: Identificar estrategias de pricing por reputación.  
+  - Transformación: Winsorizar `price` + codificar ordinalmente reputación.  
 
-**Transformaciones previas**:  
-- **`regular_price`**: Aplicar log-transform (mejorar linealidad).  
-- **`seller_reputation`**: Codificar ordinalmente (ej: "newbie"=0, "green_platinum"=4).  
+- **Grupo 2 (Inventario y Logística)**:  
+  - Variables: `stock`, `logistic_type`, `categoria`.  
+  - Objetivo: Explorar eficiencia logística por categoría.  
+  - Transformación: Agrupar categorías minoritarias.  
 
 ---
 
 #### **5. Advertencias Clave**  
-- **Limitación 1**: Alta cardinalidad en `titulo` y `url` (requiere eliminación o procesamiento avanzado).  
-- **Limitación 2**: Desequilibrio en `is_refurbished` (puede sesgar modelos predictivos).  
+- **Limitación 1**: Outliers en `price` invalidan estadísticas descriptivas actuales.  
+  - **Impacto**: Cualquier modelo sin tratamiento será sesgado.  
+- **Limitación 2**: Alta cardinalidad en `titulo` (174K únicos).  
+  - **Acción**: Usar NLP básico (ej: longitud de texto) o excluir.  
 
 ---
 
 #### **6. Conclusión Ejecutiva**  
-- **Calidad del dataset**: Aceptable con deficiencias controlables (alta tasa de nulos en `regular_price`, outliers en `price`).  
-- **Variables prometedoras**: `price` (análisis de precios), `seller_reputation` (segmentación), `categoria` (patrones de inventario).  
-- **Riesgos principales**:  
-  - Outliers en precios distorsionan métricas.  
-  - Desequilibrio en variables booleanas afecta modelos.  
-- **Valor potencial**: Dataset robusto para análisis de precios y reputación si se aplican imputaciones y transformaciones sugeridas.  
+- **Calidad del Dataset**: **Aceptable con deficiencias críticas**.  
+  - **Fortalezas**: Jerarquías claras (reputación), cobertura amplia (185K registros).  
+  - **Debilidades**: Outliers extremos, nulos en `regular_price`, desbalances.  
+- **Variables Prometedoras**:  
+  - `seller_reputation` y `price` para segmentación.  
+  - `logistic_type` para análisis operacional.  
+- **Riesgos Principales**:  
+  - Outliers no tratados invalidarán modelos.  
+  - Desbalance en `is_refurbished` requiere técnicas especializadas.  
+- **Valor Potencial**:  
+  - Con transformaciones, el dataset permite análisis de pricing, eficiencia logística y reputación de vendedores.  
 
-**Recomendación final**: Priorizar limpieza de outliers y nulos antes de clustering o modelos predictivos.
+--- 
+
+**Nota Final**: Priorizar limpieza de outliers y codificación ordinal antes de EDA avanzado.
